@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+      <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Przykładowe aplikacje vue</title>
+    <style>
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+        }
+        
+        li {
+            display: inline-block;
+            padding: 10px;
+        }
+        
+        li:hover {
+            background-color: #ddd;
+        }
+        
+        /* Stylizacja zawartości podstron */
+        .content {
+            padding: 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li><a href="#ap1">Apka 1</a></li>
+        <li><a href="#ap2">Apka 2</a></li>
+        <li><a href="#ap3">Apka 3</a></li>
+    </ul>
+    
+    <div class="content">
+        <div id="ap1" class="hidden">
+            <h2>Aplikacja 1</h2>
+
+  <div id="app1">
+    <h1>{{ message }}</h1>
+    <button @click="increment">Zwiększ</button>
+    <button @click="decrement">Zmniejsz</button>
+    <p>Aktualna wartość: {{ count }}</p>
+  </div>
+  <script>
+    new Vue({
+      el: '#app1',
+      data: {
+        message: 'Prosta licznik',
+        count: 0
+      },
+      methods: {
+        increment: function() {
+          this.count++;
+        },
+        decrement: function() {
+          this.count--;
+        }
+      }
+    });
+  </script>
+        </div>
+        
+        <div id="ap2" class="hidden">
+            <h2>Aplikacja 2</h2>
+<div id="app2">
+    <h1>Lista zadań</h1>
+    <form @submit.prevent="addTask">
+      <input type="text" v-model="newTask" placeholder="Dodaj nowe zadanie" required>
+      <button type="submit">Dodaj</button>
+    </form>
+    <ul>
+      <li v-for="task in tasks" :key="task.id">
+        {{ task.text }}
+        <button @click="removeTask(task.id)">Usuń</button>
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app2',
+      data: {
+        newTask: '',
+        tasks: []
+      },
+      methods: {
+        addTask: function() {
+          if (this.newTask.trim() !== '') {
+            this.tasks.push({
+              id: Date.now(),
+              text: this.newTask
+            });
+            this.newTask = '';
+          }
+        },
+        removeTask: function(taskId) {
+          this.tasks = this.tasks.filter(task => task.id !== taskId);
+        }
+      }
+    });
+  </script>
+        </div>
+        <div id="ap3" class="hidden">
+            <h2>Aplikacja 3</h2>
+<div id="app3">
+    <h1>Katalog filmów</h1>
+    <input v-model="searchTerm" placeholder="Wyszukaj film">
+    <ul>
+      <li v-for="movie in filteredMovies" :key="movie.id">
+        <h3>{{ movie.title }}</h3>
+        <p>Rok produkcji: {{ movie.year }}</p>
+      </li>
+    </ul>
+  </div>
+  <script>
+    new Vue({
+      el: '#app3',
+      data: {
+        searchTerm: '',
+        movies: [
+          { id: 1, title: 'Ojciec chrzestny', year: 1972 },
+          { id: 2, title: 'Forrest Gump', year: 1994 },
+          { id: 3, title: 'Matrix', year: 1999 },
+          { id: 4, title: 'Nietykalni', year: 2011 },
+          { id: 5, title: 'Zielona mila', year: 1999 }
+        ]
+      },
+      computed: {
+        filteredMovies: function() {
+          return this.movies.filter(movie =>
+            movie.title.toLowerCase().includes(this.searchTerm.toLowerCase())
+          );
+        }
+      }
+    });
+  </script>
+    </div>
+    </div>
+
+    <script>
+        function scrollToSection(sectionId) {
+            const section = document.querySelector(sectionId);
+            if (section) {
+                window.scrollTo({
+                    top: section.offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        }
+        
+        function hideOtherSections(sectionId) {
+            const sections = document.querySelectorAll('.content > div');
+            sections.forEach(function(section) {
+                if (section.id === sectionId) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+        }
+        
+        const menuLinks = document.querySelectorAll('ul li a');
+        menuLinks.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const href = link.getAttribute('href');
+                scrollToSection(href);
+                hideOtherSections(href.substring(1));
+            });
+        });
+    </script>
+</body>
+</html>
